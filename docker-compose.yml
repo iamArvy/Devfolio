@@ -1,0 +1,80 @@
+services:
+  # api-gateway:
+  #   build:
+  #     context: .
+  #     args:
+  #       SERVICE: "api-gateway"
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - auth-service
+  #     - dashboard-service
+  #     # - api-service
+  #   environment:
+  #     AUTH_SERVICE_URL: "http://devfolio-auth-service:3000/auth"
+  #     USER_SERVICE_URL: "http://devfolio-auth-service:3000/user"
+  #     DASHBOARD_SERVICE_URL: "http://devfolio-dashboard-service:3000"
+  #     # API_SERVICE_URL: 'http://devfolio-api-service:3000'
+  #   networks:
+  #     - devfolio-network
+  #   container_name: devfolio-api-gateway
+
+  auth-service:
+    build:
+      context: ./auth
+    depends_on:
+      - db
+    environment:
+      JWT_SECRET: "my-secret"
+      REFRESH_SECRET: "my-refresh-secret"
+      DATABASE_URL: "postgres://user:password@db:5432/devfoliodb"
+    networks:
+      - devfolio-network
+    container_name: devfolio-auth-service
+
+  dashboard-service:
+    build:
+      context: ./dashboard
+    depends_on:
+      - db
+    environment:
+      JWT_SECRET: "my-secret"
+      REFRESH_SECRET: "my-refresh-secret"
+      DATABASE_URL: "postgres://user:password@db:5432/devfoliodb"
+    networks:
+      - devfolio-network
+    container_name: devfolio-dashboard-service
+
+  api-service:
+    build:
+      context: ./api
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgres://user:password@db:5432/devfoliodb"
+    networks:
+      - devfolio-network
+    container_name: devfolio-container-service
+
+  db:
+    image: postgres:latest
+    container_name: devfolio-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: devfoliodb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - devfolio-network
+
+volumes:
+  db-data:
+
+networks:
+  devfolio-network:
+    driver: bridge
