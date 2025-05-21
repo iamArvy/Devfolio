@@ -1,0 +1,4 @@
+template-file-path: infra/templates/ecs.yml
+parameters:
+  ParentVPCStack: Devfolio-ASG
+tags: {}

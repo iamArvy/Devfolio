@@ -19,6 +19,7 @@ class ProfileController extends Controller
     {
         return Inertia::render('settings/Profile', [
             'status' => $request->session()->get('status'),
+            'client' => $request->user()->client()
         ]);
     }
 
@@ -44,5 +45,16 @@ class ProfileController extends Controller
         return $request->delete(
             using: fn (User $user) => $user->delete()
         );
+    }
+
+    /**
+     * Generate Client Credentials.
+     */
+    public function generateClientCredentials(Request $request): RedirectResponse
+    {
+        $clientId = Str::uuid()->toString();
+        $clientSecret = Str::random(40);
+        $request->user()->client()->create();
+        return to_route('profile.edit');
     }
 }

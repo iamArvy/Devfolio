@@ -1,0 +1,11 @@
+template-file-path: infra/templates/service.yml
+parameters:
+  ParentVPCStack: Devfolio-Network
+  ParentALBStack: Devfolio-ALB
+  ParentClusterStack: Devfolio-Cluster
+  ImageRepository: 970547356413.dkr.ecr.eu-north-1.amazonaws.com/devfolio/auth
+  PathPattern: /auth/*
+  ServiceName: auth-service
+  ListenerPriority: 1
+  # ECSTaskExecutionRole: arn:aws:iam::970547356413:role/Devfolio-ECS-Role-K4gBJ4VBNLMQ
+tags: {}

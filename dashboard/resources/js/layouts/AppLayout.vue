@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Sonner from '@/components/Sonner.vue';
 import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
 
@@ -12,7 +13,12 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
+    <Sonner />
     <AppLayout :breadcrumbs="breadcrumbs">
+        <template #page-actions>
+            <slot name="page-actions"></slot>
+        </template>
+
         <slot />
     </AppLayout>
 </template>

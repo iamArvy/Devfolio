@@ -1,0 +1,141 @@
+Parameters:
+  ParentVPCStack:
+    Type: String
+    Description: The name of the parent VPC stack.
+  ParentALBStack:
+    Type: String
+    Description: The name of the parent ALB stack.
+  ParentClusterStack:
+    Type: String
+    Description: The name of the parent ECS cluster stack.
+  ImageRepository:
+    Type: String
+    Description: The URI of the ECR repository for the service.
+  PathPattern:
+    Type: String
+    Description: The path pattern for the auth service.
+    Default: /auth/*
+    AllowedPattern: ^/.*$
+  ServiceName:
+    Type: String
+    Description: The name of the microservice.
+  ListenerPriority:
+    Type: Number
+    Description: The priority of the listener rule.
+    Default: 100
+  ContainerPort:
+    Type: Number
+    Description: The port on which the container is listening.
+    Default: 3000
+  Cpu:
+    Type: Number
+    Description: The number of cpu units used by the task.
+    Default: 256
+  Memory:
+    Type: Number
+    Description: The amount (in MiB) of memory used by the task.
+    Default: 512
+
+Resources:
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AuthServiceTaskExecutionRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Policies:
+      - PolicyName: SSMParameterAccess
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - ssm:GetParameters
+                - ssm:GetParameter
+              Resource: arn:aws:ssm:eu-west-1:970547356413:parameter/devfolio/*
+
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${ServiceName}-tg"
+      Protocol: HTTP
+      Port: 80
+      VpcId: {'Fn::ImportValue': !Sub '${ParentVPCStack}-VPC'}
+      TargetType: instance
+
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - !Ref PathPattern
+      ListenerArn: {'Fn::ImportValue': !Sub '${ParentALBStack}-ALBHttpListener'}
+      Priority: !Ref ListenerPriority
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub "${ServiceName}-task"
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      RequiresCompatibilities:
+        - "EC2"
+      NetworkMode: bridge
+      ContainerDefinitions:
+        - Name: !Ref ServiceName
+          Image: !Ref ImageRepository
+          Essential: true
+          Memory: !Ref Memory
+          Cpu: !Ref Cpu
+          Environment:
+            - Name: PORT
+              Value: !Ref ContainerPort
+            - Name: NODE_ENV
+              Value: production
+            - Name: AWS_REGION
+              Value: !Sub "${AWS::Region}"
+            - Name: REFRESH_TOKEN_EXPIRY
+              Value: 7d
+            - Name: ACCESS_TOKEN_EXPIRY
+              Value: 15m
+          Secrets: 
+            - Name: JWT_SECRET
+              ValueFrom: !Sub "/devfolio/access-secret"
+            - Name: DB_URL
+              ValueFrom: !Sub "/devfolio/db-url"
+            - Name: REFRESH_SECRET
+              ValueFrom: !Sub "/devfolio/refresh-secret"
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+          # LogConfiguration:
+          #   LogDriver: awslogs
+          #   Options:
+          #     awslogs-group: !Sub "/ecs/${AWS::StackName}-logs"
+          #     awslogs-region: !Sub "${AWS::Region}"
+          #     awslogs-stream-prefix: !Ref ServiceName
+  Service:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Ref ServiceName
+      Cluster: {'Fn::ImportValue': !Sub '${ParentClusterStack}-ECSCluster'}
+      TaskDefinition: !Ref TaskDefinition
+      DesiredCount: 1
+      LaunchType: "EC2"
+      LoadBalancers:  # ✅ Added to link ECS to ALB
+        - ContainerName: !Ref ServiceName
+          ContainerPort: !Ref ContainerPort
+          TargetGroupArn: !Ref TargetGroup
+      PlacementStrategies:
+        - Type: spread
+          Field: attribute:ecs.availability-zone
