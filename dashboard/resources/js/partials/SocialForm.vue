@@ -1,40 +1,30 @@
 <script setup lang="ts">
-import { Label } from '@/components/ui/label';
-// import TipTap from "@/Components/TipTap.vue";
-import { useForm } from '@inertiajs/vue3';
-// import { ref } from 'vue';
-// import { ImageInput, Sheet } from "@/partials";
-import Sheet from '@/components/Sheet.vue';
-import { Input } from '@/components/ui/input';
-// import { route } from "@/utils";
-// import { Categories } from "@/types";
-// import { Post } from "@/types/blog/post";
 import InputError from '@/components/InputError.vue';
+import Sheet from '@/components/Sheet.vue';
 import { Button } from '@/components/ui/button';
-import { Certification } from '@/types';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Social } from '@/types';
+import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps<{
     isUpdate?: boolean;
-    item?: Certification;
+    item?: Social;
 }>();
 const form = useForm({
     name: props.isUpdate && props.item ? props.item.name : '',
-    location: props.isUpdate && props.item ? props.item.location : '',
-    // highlights: props.isUpdate && props.certification ? props.certification.highlights : [],
-    date_acquired: props.isUpdate && props.item ? props.item.date_acquired : '',
-    // media: null,
+    value: props.isUpdate && props.item ? props.item.value : '',
+    icon: props.isUpdate && props.item ? props.item.icon : '',
     link: props.isUpdate && props.item ? props.item.link : '',
 });
 
-// const photoPreview = props.isUpdate ? props.certification?.media : ref(null);
-
 const submit = () =>
     props.isUpdate
-        ? form.patch(route('certifications.update', { certification: props.item?.id }), {
+        ? form.patch(route('socials.update', { social: props.item?.id }), {
               onSuccess: () => form.reset,
               preserveScroll: true,
           })
-        : form.post(route('certifications.store'), {
+        : form.post(route('socials.store'), {
               onSuccess: () => form.reset,
               preserveScroll: true,
           });
@@ -50,25 +40,20 @@ const submit = () =>
         </template>
         <template #content>
             <form @submit.prevent="submit">
-                <!-- <div class="flex flex-col gap-2 p-2">
-                    <Label for="image">Image</Label>
-                    <ImageInput v-model="form.image" :preview="photoPreview" id="image" />
-                    <InputError :message="form.errors.title" />
-                </div> -->
                 <div class="flex flex-col gap-2 p-2">
-                    <Label for="title">Name</Label>
-                    <Input id="title" v-model="form.name" />
+                    <Label for="name">Name</Label>
+                    <Input id="name" v-model="form.name" />
                     <InputError :message="form.errors.name" />
                 </div>
                 <div class="flex flex-col gap-2 p-2">
-                    <Label for="category">Location</Label>
-                    <Input v-model="form.location" autocomplete />
-                    <InputError :message="form.errors.location" />
+                    <Label for="value">Value</Label>
+                    <Input id="value" v-model="form.value" autocomplete />
+                    <InputError :message="form.errors.value" />
                 </div>
                 <div class="flex flex-col gap-2 p-2">
-                    <Label for="content">Date Acquired</Label>
-                    <Input type="month" v-model="form.date_acquired" autocomplete class="w-fit" />
-                    <InputError :message="form.errors.date_acquired" />
+                    <Label for="icon">Icon</Label>
+                    <Input v-model="form.icon" autocomplete />
+                    <InputError :message="form.errors.icon" />
                 </div>
                 <div class="flex flex-col gap-2 p-2">
                     <Label for="link">Link</Label>

@@ -34,7 +34,7 @@ class ProfileController extends Controller
 
         $request->user()->update(['name' => $request->name]);
 
-        return to_route('profile.edit');
+        return to_route('settings.profile.edit');
     }
 
     /**
@@ -55,6 +55,6 @@ class ProfileController extends Controller
         $clientId = Str::uuid()->toString();
         $clientSecret = Str::random(40);
         $request->user()->client()->create();
-        return to_route('profile.edit');
+        return to_route('settings.profile.edit');
     }
 }

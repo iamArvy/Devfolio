@@ -24,7 +24,7 @@ class ClientController extends Controller
     public function create(Request $request): RedirectResponse
     {
         $request->user()->client()->create();
-        return to_route('profile.edit');
+        return to_route('settings.client.index');
     }
 
     /**
@@ -34,6 +34,6 @@ class ClientController extends Controller
     {
         $clientSecret = Str::random(40);
         $request->user()->client()->update(['secret' => $clientSecret]);
-        return to_route('profile.edit');
+        return to_route('settings.client.index');
     }
 }

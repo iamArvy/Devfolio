@@ -11,30 +11,29 @@ import { Input } from '@/components/ui/input';
 // import { Post } from "@/types/blog/post";
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
-import { Certification } from '@/types';
+import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input';
+import Textarea from '@/components/ui/textarea/Textarea.vue';
+import { Project } from '@/types';
 
 const props = defineProps<{
     isUpdate?: boolean;
-    item?: Certification;
+    item?: Project;
 }>();
 const form = useForm({
     name: props.isUpdate && props.item ? props.item.name : '',
-    location: props.isUpdate && props.item ? props.item.location : '',
-    // highlights: props.isUpdate && props.certification ? props.certification.highlights : [],
-    date_acquired: props.isUpdate && props.item ? props.item.date_acquired : '',
-    // media: null,
+    description: props.isUpdate && props.item ? props.item.description : '',
+    tags: props.isUpdate && props.item ? props.item.tags : [],
     link: props.isUpdate && props.item ? props.item.link : '',
+    repository: props.isUpdate && props.item ? props.item.repository : '',
 });
-
-// const photoPreview = props.isUpdate ? props.certification?.media : ref(null);
 
 const submit = () =>
     props.isUpdate
-        ? form.patch(route('certifications.update', { certification: props.item?.id }), {
+        ? form.patch(route('projects.update', { project: props.item?.id }), {
               onSuccess: () => form.reset,
               preserveScroll: true,
           })
-        : form.post(route('certifications.store'), {
+        : form.post(route('projects.store'), {
               onSuccess: () => form.reset,
               preserveScroll: true,
           });
@@ -56,24 +55,36 @@ const submit = () =>
                     <InputError :message="form.errors.title" />
                 </div> -->
                 <div class="flex flex-col gap-2 p-2">
-                    <Label for="title">Name</Label>
-                    <Input id="title" v-model="form.name" />
+                    <Label for="role">Name</Label>
+                    <Input id="role" v-model="form.name" />
                     <InputError :message="form.errors.name" />
                 </div>
                 <div class="flex flex-col gap-2 p-2">
-                    <Label for="category">Location</Label>
-                    <Input v-model="form.location" autocomplete />
-                    <InputError :message="form.errors.location" />
-                </div>
-                <div class="flex flex-col gap-2 p-2">
-                    <Label for="content">Date Acquired</Label>
-                    <Input type="month" v-model="form.date_acquired" autocomplete class="w-fit" />
-                    <InputError :message="form.errors.date_acquired" />
+                    <Label for="description">Description</Label>
+                    <Textarea id="role" v-model="form.description" autocomplete />
+                    <InputError :message="form.errors.description" />
                 </div>
                 <div class="flex flex-col gap-2 p-2">
                     <Label for="link">Link</Label>
                     <Input type="url" v-model="form.link" autocomplete />
                     <InputError :message="form.errors.link" />
+                </div>
+                <div class="flex flex-col gap-2 p-2">
+                    <Label for="repository">Repository</Label>
+                    <Input type="url" v-model="form.repository" autocomplete />
+                    <InputError :message="form.errors.repository" />
+                </div>
+                <div class="flex flex-col gap-2 p-2">
+                    <Label for="repository">Tags</Label>
+                    <TagsInput v-model="form.tags">
+                        <TagsInputItem v-for="item in form.tags" :key="item" :value="item">
+                            <TagsInputItemText />
+                            <TagsInputItemDelete />
+                        </TagsInputItem>
+
+                        <TagsInputInput placeholder="Website..." />
+                    </TagsInput>
+                    <InputError :message="form.errors.tags" />
                 </div>
             </form>
         </template>

@@ -29,7 +29,7 @@ class CertificationController extends Controller
     {
         $validated = $request->validated();
         $certification = $request->user()->certifications()->create($validated);
-        return to_route('certifications.index');
+        return to_route('certifications.index')->with('success', 'Certification successfully created');
     }
 
     /**
@@ -39,7 +39,7 @@ class CertificationController extends Controller
     {
         $this->authorize('update', $certification);
         $validated = $request->validated();
-        $certification = $request->user()->certifications()->update($validated);
+        $certification->update($validated);
         return to_route('certifications.index')->with('success', 'Certification successfully updated');
     }
 
@@ -50,6 +50,6 @@ class CertificationController extends Controller
     {
         $this->authorize('delete', $certification);
         $certification->delete();
-        return to_route('certifications.index');
+        return to_route('certifications.index')->with('success', 'Certification successfully deleted');
     }
 }

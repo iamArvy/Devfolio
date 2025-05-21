@@ -12,14 +12,14 @@ Route::middleware([
 ])->group(function () {
     Route::redirect('settings', '/settings/profile');
 
-    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('settings.profile.edit');
+    Route::patch('settings/profile', [ProfileController::class, 'update'])->name('settings.profile.update');
+    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('settings.profile.destroy');
 
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/Appearance');
-    })->name('appearance');
+    })->name('settings.appearance');
 
-    Route::get('settings/client', [ClientController::class, 'index'])->name('client.index');
+    Route::get('settings/client', [ClientController::class, 'index'])->name('settings.client.index');
 
 });

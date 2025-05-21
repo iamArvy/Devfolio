@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Experience extends Model
+class Project extends Model
 {
      /**
      * The attributes that are mass assignable.
@@ -12,13 +12,14 @@ class Experience extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'role',
-        'location',
-        'highlights',
-        'start_date',
-        'end_date',
-        'active',
+        'name',
+        'description',
+        'link',
+        'repository',
+        'tags',
+        'image'
     ];
+
 
     /**
      * Get the attributes that should be cast.
@@ -28,7 +29,7 @@ class Experience extends Model
     protected function casts(): array
     {
         return [
-            'highlights' => 'array',
+            'tags' => 'array',
         ];
     }
 

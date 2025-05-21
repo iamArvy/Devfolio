@@ -52,8 +52,33 @@ class User extends Authenticatable
         return $this->hasOne(Client::class);
     }
 
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
     public function certifications()
     {
         return $this->hasMany(Certification::class);
+    }
+
+    public function experiences()
+    {
+        return $this->hasMany(Experience::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function stacks()
+    {
+        return $this->hasMany(Stack::class);
+    }
+
+    public function socials()
+    {
+        return $this->hasMany(Social::class);
     }
 }

@@ -108,6 +108,7 @@ export interface Project {
     name: string;
     description?: string;
     link?: string;
+    repository?: string;
     tags?: string[];
     user_id: number;
     created_at: string;
