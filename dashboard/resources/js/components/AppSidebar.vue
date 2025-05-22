@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { footerNavItems, mainNavItems } from '@/data/nav';
+import { mainNavItems } from '@/data/nav';
 import { Link } from '@inertiajs/vue3';
 import AppLogo from './AppLogo.vue';
 </script>
@@ -27,7 +26,7 @@ import AppLogo from './AppLogo.vue';
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
+            <!-- <NavFooter :items="footerNavItems" /> -->
             <NavUser />
         </SidebarFooter>
     </Sidebar>

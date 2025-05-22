@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 // import { Post } from "@/types/blog/post";
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
+import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input';
 import { Certification } from '@/types';
 
 const props = defineProps<{
@@ -20,7 +21,7 @@ const props = defineProps<{
 const form = useForm({
     name: props.isUpdate && props.item ? props.item.name : '',
     location: props.isUpdate && props.item ? props.item.location : '',
-    // highlights: props.isUpdate && props.certification ? props.certification.highlights : [],
+    highlights: props.isUpdate && props.item ? props.item.highlights : [],
     date_acquired: props.isUpdate && props.item ? props.item.date_acquired : '',
     // media: null,
     link: props.isUpdate && props.item ? props.item.link : '',
@@ -74,6 +75,18 @@ const submit = () =>
                     <Label for="link">Link</Label>
                     <Input type="url" v-model="form.link" autocomplete />
                     <InputError :message="form.errors.link" />
+                </div>
+                <div class="flex flex-col gap-2 p-2">
+                    <Label for="highlights">Highlights</Label>
+                    <TagsInput v-model="form.highlights">
+                        <TagsInputItem v-for="item in form.highlights" :key="item" :value="item">
+                            <TagsInputItemText />
+                            <TagsInputItemDelete />
+                        </TagsInputItem>
+
+                        <TagsInputInput placeholder="I worked on various...." />
+                    </TagsInput>
+                    <InputError :message="form.errors.highlights" />
                 </div>
             </form>
         </template>

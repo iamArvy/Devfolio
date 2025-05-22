@@ -1,36 +1,36 @@
 import { NavItem } from '@/types';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { BadgeCheck, BookOpen, Briefcase, Folder, FolderKanban, Layers, Share2, User } from 'lucide-vue-next';
 
 export const mainNavItems: NavItem[] = [
     {
         title: 'Profile',
         href: '/profile',
-        icon: LayoutGrid,
+        icon: User,
     },
     {
         title: 'Certifications',
         href: '/certifications',
-        icon: LayoutGrid,
+        icon: BadgeCheck,
     },
     {
         title: 'Experiences',
         href: '/experiences',
-        icon: LayoutGrid,
+        icon: Briefcase,
     },
     {
         title: 'Projects',
         href: '/projects',
-        icon: LayoutGrid,
+        icon: FolderKanban,
     },
     {
         title: 'Stacks',
         href: '/stacks',
-        icon: LayoutGrid,
+        icon: Layers,
     },
     {
         title: 'Socials',
         href: '/socials',
-        icon: LayoutGrid,
+        icon: Share2,
     },
 ];
 

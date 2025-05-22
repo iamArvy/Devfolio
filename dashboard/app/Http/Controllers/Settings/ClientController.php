@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
+use Illuminate\Support\Str;
 
 class ClientController extends Controller
 {
@@ -14,7 +15,7 @@ class ClientController extends Controller
      */
     public function index(Request $request): Response
     {
-        $client = $request->user()->client();
+        $client = $request->user()->client()->first();
         return inertia()->render('settings/Client', ['client' => $client]);
     }
 
@@ -28,12 +29,22 @@ class ClientController extends Controller
     }
 
     /**
-     * Generate Client Credentials.
+     * Update Client Secret.
      */
-    public function refreshSecret(Request $request): RedirectResponse
+    public function refresh(Request $request): RedirectResponse
     {
         $clientSecret = Str::random(40);
         $request->user()->client()->update(['secret' => $clientSecret]);
+        return to_route('settings.client.index');
+    }
+
+    /**
+     * Delete Client Credentials.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $clientSecret = Str::random(40);
+        $request->user()->client()->delete();
         return to_route('settings.client.index');
     }
 }

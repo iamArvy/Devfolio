@@ -14,7 +14,7 @@ const props = defineProps<{
 const form = useForm({
     role: props.isUpdate && props.item ? props.item.role : '',
     location: props.isUpdate && props.item ? props.item.location : '',
-    // highlights: props.isUpdate && props.item ? props.item.highlights : [],
+    highlights: props.isUpdate && props.item ? props.item.highlights : [],
     start_date: props.isUpdate && props.item ? props.item.start_date : '',
     end_date: props.isUpdate && props.item ? props.item.end_date : '',
     active: props.isUpdate && props.item ? props.item.active : undefined,
@@ -61,6 +61,18 @@ const submit = () =>
                     <Label for="end-date">End Date</Label>
                     <Input type="month" v-model="form.end_date" class="w-fit" />
                     <InputError :message="form.errors.end_date" />
+                </div>
+                <div class="flex flex-col gap-2 p-2">
+                    <Label for="highlights">Highlights</Label>
+                    <TagsInput v-model="form.highlights">
+                        <TagsInputItem v-for="item in form.highlights" :key="item" :value="item">
+                            <TagsInputItemText />
+                            <TagsInputItemDelete />
+                        </TagsInputItem>
+
+                        <TagsInputInput placeholder="I worked on various...." />
+                    </TagsInput>
+                    <InputError :message="form.errors.highlights" />
                 </div>
             </form>
         </template>
