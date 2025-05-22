@@ -1,4 +1,0 @@
-template-file-path: infra/templates/alb.yml
-parameters:
-  ParentVPCStack: Devfolio-Networks
-tags: {}

@@ -1,8 +1,0 @@
-template-file-path: infra/templates/database.yml
-parameters:
-  ParentVPCStack: Devfolio-Networks
-  ParentClusterStack: Devfolio-Cluster
-  DBInstanceIdentifier: "devfolio-db-id"
-  DBEngine: postgres
-  DBVersion: 17.4
-tags: {}
