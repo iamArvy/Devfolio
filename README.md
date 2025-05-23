@@ -29,7 +29,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/devfolio.git
+   git clone https://github.com/iamarvy/devfolio.git
    cd devfolio
    ```
 
@@ -42,35 +42,21 @@
    php artisan key:generate
    php artisan migrate
    php artisan serve
+   composer run dev
    ```
-
-3. Install NestJS API dependencies:
-   ```bash
-   cd api
-   pnpm install
-   pnpm run start:dev
-   ```
-
-   The dashboard will be available at `http://localhost:8000` and the API at `http://localhost:3000`.
+   The dashboard will be available at `http://localhost:8000`.
 
 ---
 
 ## 🧪 Running Tests
 
-Each service contains its own set of tests.
-
 ```bash
-# Example for Laravel dashboard
-cd dashboard
 php artisan test
 
-# Example for NestJS API
-cd api
-pnpm test
 ```
 
 ---
-
+<!-- 
 ## 📦 Folder Structure
 
 ```
@@ -79,23 +65,10 @@ devfolio/
 ├── api/                    # NestJS-based API
 ├── .env                    # Environment configuration
 └── README.md
-```
+``` -->
 
 ---
 
-## 📈 Future Features
-
-- Profile customizations (e.g., themes, layout changes)
-- Enhanced authentication (OAuth, SSO)
-- More API endpoints for greater flexibility (e.g., file uploads, social links)
-
----
-
-## 📝 License
-
-MIT License – see [LICENSE](./LICENSE)
-
----
 
 ## 🙌 Acknowledgements
 

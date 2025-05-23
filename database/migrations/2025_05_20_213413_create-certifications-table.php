@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('date_acquired')->nullable();
             $table->string('media')->nullable();
             $table->string('link')->nullable();
-            $table->foreignUuid('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->unique()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -18,6 +18,9 @@ class Client extends Model
         parent::boot();
 
         static::creating(function ($model) {
+            if (!$model->id) {
+                $model->id = Str::uuid();
+            }
             if (!$model->secret) {
                 $model->secret = Str::random(40);
             }

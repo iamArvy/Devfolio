@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('repository')->nullable();
             $table->json('tags')->nullable();
             $table->string('image')->nullable();
-            $table->foreignUuid('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->unique()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

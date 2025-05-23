@@ -13,6 +13,6 @@ Route::get('authenticate', function (AuthKitAuthenticationRequest $request) {
     return tap(to_route('profile.index'), fn () => $request->authenticate());
 })->middleware(['guest']);
 
-Route::post('logout', function (AuthKitLogoutRequest $request) {
+Route::get('logout', function (AuthKitLogoutRequest $request) {
     return $request->logout();
 })->middleware(['auth'])->name('logout');
