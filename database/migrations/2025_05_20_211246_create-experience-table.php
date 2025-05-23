@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('experiences', function(Blueprint $table){
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('role');
             $table->string('location');
             $table->json('highlights')->nullable();
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->string('start_date')->nullable();
+            $table->string('end_date')->nullable();
             $table->boolean('active')->nullable();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignUuid('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

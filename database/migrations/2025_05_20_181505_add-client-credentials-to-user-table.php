@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table){
             $table->uuid('id')->primary();
-            $table->string('client_secret', 64)->nullable();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('secret')->unique()->nullable();
+            $table->foreignUuid('user_id')->unique()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
         //

@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('certifications', function(Blueprint $table){
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('location');
             $table->json('highlights')->nullable();
-            $table->date('date_acquired')->nullable();
+            $table->string('date_acquired')->nullable();
             $table->string('media')->nullable();
             $table->string('link')->nullable();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignUuid('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

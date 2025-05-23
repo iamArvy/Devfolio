@@ -12,13 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('projects', function(Blueprint $table){
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('link')->nullable();
             $table->string('repository')->nullable();
             $table->json('tags')->nullable();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('image')->nullable();
+            $table->foreignUuid('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
